@@ -1,0 +1,9 @@
+<h2>Edit Song</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="title" value="{{ song.title }}"><br>
+    <input type="text" name="artist" value="{{ song.artist }}"><br>
+    <input type="text" name="genre" value="{{ song.genre }}"><br>
+    <button type="submit">Update</button>
+</form>

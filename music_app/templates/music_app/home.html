@@ -1,0 +1,16 @@
+<h1>Music Dashboard</h1>
+
+<a href="{% url 'add_song' %}">Add Song</a>
+
+<hr>
+
+{% for song in songs %}
+    <p>
+        {{ song.title }} - {{ song.artist }} ({{ song.genre }})
+
+        <a href="{% url 'edit_song' song.id %}">Edit</a>
+        <a href="{% url 'delete_song' song.id %}">Delete</a>
+    </p>
+{% empty %}
+    <p>No songs yet</p>
+{% endfor %}
