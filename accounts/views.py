@@ -1,7 +1,38 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Song
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm
 
-# HOME PAGE (THIS WAS MISSING)
-def home(request):
-    songs = Song.objects.all()
-    return render(request, 'music_app/home.html', {'songs': songs})
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'accounts/register.html', {'form': form})
+
+
+def user_login(request):
+    error = None
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            error = "Invalid username or password"
+    return render(request, 'registration/login.html', {'error': error})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
+
+
+def profile(request):
+    return render(request, 'accounts/profile.html')
