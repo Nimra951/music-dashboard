@@ -1,4 +1,7 @@
-<h1>Music Dashboard</h1>
+
+{% extends 'base.html' %}
+
+{% block content %}<h1>Music Dashboard</h1>
 
 <a href="{% url 'add_song' %}">Add Song</a>
 <a href="{% url 'profile' %}">Profile</a>
@@ -17,3 +20,4 @@
 {% empty %}
     <p>No songs yet</p>
 {% endfor %}
+{% endblock %}
