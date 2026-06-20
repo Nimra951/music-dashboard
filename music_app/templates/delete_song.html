@@ -1,0 +1,15 @@
+{% extends 'music_app/base.html' %}
+
+{% block content %}
+
+<h2>Delete Song</h2>
+
+<p>Are you sure you want to delete "{{ song.title }}"?</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+    <a href="{% url 'home' %}">Cancel</a>
+</form>
+
+{% endblock %}

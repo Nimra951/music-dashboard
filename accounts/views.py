@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Song
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
-# HOME PAGE (THIS WAS MISSING)
-def home(request):
-    songs = Song.objects.all()
-    return render(request, 'music_app/home.html', {'songs': songs})
+@login_required
+def profile(request):
+    return render(request, 'accounts/profile.html')
