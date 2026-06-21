@@ -2,16 +2,15 @@
 {% block content %}
 
 <h2>📊 Dashboard</h2>
-
-<div style="display:flex; gap:20px; margin-bottom:20px;">
-  <div style="border:1px solid #ccc; padding:20px; border-radius:8px;">
-    <h3>Total Songs</h3>
-    <p style="font-size:2em;">{{ total_songs }}</p>
-  </div>
-  <div style="border:1px solid #ccc; padding:20px; border-radius:8px;">
-    <h3>Avg Popularity</h3>
-    <p style="font-size:2em;">{{ avg_popularity }}</p>
-  </div>
+<div style="display: flex; gap: 20px; margin-bottom: 30px;">
+    <div class="card" style="flex: 1; text-align: center;">
+        <p style="color: var(--spotify-text); margin-bottom: 8px;">Total Songs</p>
+        <h2 style="margin: 0; color: var(--spotify-green);">{{ total_songs }}</h2>
+    </div>
+    <div class="card" style="flex: 1; text-align: center;">
+        <p style="color: var(--spotify-text); margin-bottom: 8px;">Avg Popularity</p>
+        <h2 style="margin: 0; color: var(--spotify-green);">{{ avg_popularity }}</h2>
+    </div>
 </div>
 
 <h3>🏆 Top 10 Songs by Popularity</h3>

@@ -1,7 +1,14 @@
-<h2>Add Song</h2>
+{% extends 'base.html' %}
+{% block content %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
+<div style="max-width: 500px; margin: 40px auto;">
+    <h1>Add Song</h1>
+
+    <form method="POST" class="card">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</div>
+
+{% endblock %}

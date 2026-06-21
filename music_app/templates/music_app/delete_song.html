@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="max-width: 500px; margin: 40px auto;">
+    <div class="card" style="text-align: center;">
+        <h1>Delete song</h1>
+        <p>Are you sure you want to delete "<strong>{{ song.title }}</strong>"?</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" style="background-color: #E24B4A; margin-right: 10px;">Yes, delete</button>
+            <a href="{% url 'home' %}" class="btn">Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
