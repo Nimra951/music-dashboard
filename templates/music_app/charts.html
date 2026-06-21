@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Charts & Visualizations</h1>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+
+    <div style="height: 320px;">
+        <h3>Genre Distribution</h3>
+        <canvas id="genreChart"></canvas>
+    </div>
+
+    <div style="height: 320px;">
+        <h3>Energy Level Split</h3>
+        <canvas id="energyChart"></canvas>
+    </div>
+
+    <div style="height: 320px;">
+        <h3>Average Popularity by Year</h3>
+        <canvas id="yearChart"></canvas>
+    </div>
+
+    <div style="height: 320px;">
+        <h3>Energy vs Popularity</h3>
+        <canvas id="scatterChart"></canvas>
+    </div>
+
+    <div style="height: 320px;">
+        <h3>Songs by Year Range</h3>
+        <canvas id="histogramChart"></canvas>
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false
+};
+
+new Chart(document.getElementById('genreChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ genre_labels|safe }},
+        datasets: [{ label: 'Songs', data: {{ genre_data|safe }}, backgroundColor: '#1DB954' }]
+    },
+    options: chartOptions
+});
+
+new Chart(document.getElementById('energyChart'), {
+    type: 'pie',
+    data: {
+        labels: {{ energy_labels|safe }},
+        datasets: [{ data: {{ energy_data|safe }}, backgroundColor: ['#1DB954', '#FFC107', '#E74C3C'] }]
+    },
+    options: chartOptions
+});
+
+new Chart(document.getElementById('yearChart'), {
+    type: 'line',
+    data: {
+        labels: {{ year_labels|safe }},
+        datasets: [{ label: 'Avg Popularity', data: {{ year_popularity|safe }}, borderColor: '#1DB954', fill: false }]
+    },
+    options: chartOptions
+});
+
+new Chart(document.getElementById('scatterChart'), {
+    type: 'scatter',
+    data: {
+        datasets: [{ label: 'Energy vs Popularity', data: {{ scatter_data|safe }}, backgroundColor: '#1DB954' }]
+    },
+    options: {
+        ...chartOptions,
+        scales: {
+            x: { title: { display: true, text: 'Energy' } },
+            y: { title: { display: true, text: 'Popularity' } }
+        }
+    }
+});
+
+new Chart(document.getElementById('histogramChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ bin_labels|safe }},
+        datasets: [{ label: 'Songs', data: {{ bin_data|safe }}, backgroundColor: '#9B59B6' }]
+    },
+    options: chartOptions
+});
+</script>
+{% endblock %}

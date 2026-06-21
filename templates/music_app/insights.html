@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Auto-Generated Insights</h1>
+
+<ul>
+    {% for insight in insights %}
+    <li style="margin-bottom: 10px; font-size: 16px;">{{ insight }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'export_csv' %}">Download CSV</a> |
+<a href="{% url 'export_pdf' %}">Download PDF Report</a>
+{% endblock %}
