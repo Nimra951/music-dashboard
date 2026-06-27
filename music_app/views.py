@@ -28,7 +28,6 @@ def add_song(request):
             return redirect('home')
     else:
         form = SongForm()
-
     return render(request, 'music_app/add_song.html', {'form': form})
 
 
@@ -41,7 +40,6 @@ def edit_song(request, song_id):
             return redirect('home')
     else:
         form = SongForm(instance=song)
-
     return render(request, 'music_app/edit_song.html', {'form': form, 'song': song})
 
 
@@ -50,7 +48,6 @@ def delete_song(request, song_id):
     if request.method == "POST":
         song.delete()
         return redirect('home')
-
     return render(request, 'music_app/delete_song.html', {'song': song})
 
 
@@ -106,6 +103,7 @@ def dashboard(request):
         'top_genres': top_genres,
     })
 
+
 def charts(request):
     songs = Song.objects.all()
 
@@ -126,20 +124,23 @@ def charts(request):
     year_popularity = [round(y['avg_pop'], 1) if y['avg_pop'] else 0 for y in year_data]
 
     scatter_data = [
-        {'x': s.energy, 'y': s.popularity} for s in songs if s.energy is not None and s.popularity is not None
+        {'x': s.energy, 'y': s.popularity}
+        for s in songs
+        if s.energy is not None and s.popularity is not None
     ]
 
-    bins = {'2015-2017': 0, '2018-2020': 0, '2021-2023': 0, '2024+': 0}
+    bins = {'Low (0-0.25)': 0, 'Medium (0.25-0.5)': 0, 'High (0.5-0.75)': 0, 'Very High (0.75+)': 0}
     for s in songs:
-        if s.year:
-            if s.year <= 2017:
-                bins['2015-2017'] += 1
-            elif s.year <= 2020:
-                bins['2018-2020'] += 1
-            elif s.year <= 2023:
-                bins['2021-2023'] += 1
+        if s.energy is not None:
+            e = s.energy
+            if e < 0.25:
+                bins['Low (0-0.25)'] += 1
+            elif e < 0.5:
+                bins['Medium (0.25-0.5)'] += 1
+            elif e < 0.75:
+                bins['High (0.5-0.75)'] += 1
             else:
-                bins['2024+'] += 1
+                bins['Very High (0.75+)'] += 1
 
     context = {
         'genre_labels': json.dumps(genre_labels),
@@ -158,7 +159,6 @@ def charts(request):
 def insights(request):
     songs = Song.objects.all()
     total = songs.count()
-
     insights_list = []
 
     if total > 0:
@@ -171,14 +171,9 @@ def insights(request):
         if avg_pop:
             insights_list.append(f"The average song popularity is {round(avg_pop, 1)} out of 100.")
 
-        peak_year = (
-            songs.values('year')
-            .annotate(count=Count('id'))
-            .order_by('-count')
-            .first()
-        )
-        if peak_year:
-            insights_list.append(f"Music releases peaked in {peak_year['year']} with {peak_year['count']} songs.")
+        second_genre = Genre.objects.annotate(count=Count('song')).order_by('-count')[1]
+        if top_genre and second_genre:
+            insights_list.append(f"Top 2 genres are {top_genre.name} and {second_genre.name}, together covering {top_genre.count + second_genre.count} songs.")
 
         high_energy_avg = songs.filter(energy__gte=0.7).aggregate(Avg('popularity'))['popularity__avg']
         low_energy_avg = songs.filter(energy__lt=0.4).aggregate(Avg('popularity'))['popularity__avg']
@@ -212,7 +207,6 @@ def export_csv(request):
             song.popularity,
             song.energy,
         ])
-
     return response
 
 
