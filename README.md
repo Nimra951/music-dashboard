@@ -1,3 +1,4 @@
+
 # Music Analytics Dashboard
 
 A Django-based web application for exploring, analyzing, and visualizing a Spotify-style music dataset. Built as a final project for Software Construction and Development (SCD).
@@ -18,20 +19,30 @@ A Django-based web application for exploring, analyzing, and visualizing a Spoti
 - **Database:** SQLite
 - **Frontend:** Bootstrap 5, Chart.js
 - **PDF Generation:** ReportLab
+- **Data Processing:** Pandas
+
+## Dataset
+
+- **Source:** [Spotify Tracks Dataset — Kaggle](https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset)
+- **Imported:** 337 songs across 10 balanced genres
+- **Genres:** acoustic, rock, hip-hop, jazz, classical, electronic, r-n-b, indie, country, latin
 
 ## Project Structure
 
 ```
 music-dashboard/
-├── accounts/              # Authentication app (login, register, logout, profile)
-├── music_app/              # Core app (songs, CRUD, search, dashboard, charts, insights)
+├── accounts/                        # Authentication app
+├── music_app/                       # Core app
+│   ├── management/
+│   │   └── commands/
+│   │       └── import_songs.py      # Kaggle CSV import command
 │   ├── templates/music_app/
 │   └── migrations/
-├── music_dashboard/        # Project settings and root URLs
+├── music_dashboard/                 # Project settings and root URLs
 ├── templates/
-│   ├── base.html            # Shared layout, navbar, theme
+│   ├── base.html
 │   └── registration/login.html
-├── db.sqlite3
+├── dataset.csv
 ├── manage.py
 └── requirements.txt
 ```
@@ -39,59 +50,48 @@ music-dashboard/
 ## Setup Instructions
 
 ### 1. Clone the repository
-
-```bash
+```
 git clone https://github.com/Nimra951/music-dashboard.git
 cd music-dashboard
 ```
 
-### 2. Create and activate a virtual environment
-
-```bash
+### 2. Create and activate virtual environment
+```
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-If you hit an execution policy error on Windows:
-
-```bash
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
-
 ### 3. Install dependencies
-
-```bash
+```
 pip install -r requirements.txt
 ```
 
 ### 4. Apply migrations
-
-```bash
+```
 python manage.py migrate
 ```
 
-### 5. Create a superuser (optional, for admin access)
+### 5. Import the Kaggle dataset
 
-```bash
-python manage.py createsuperuser
+Download `dataset.csv` from Kaggle and place it in the project root, then run:
+```
+python manage.py import_songs
 ```
 
-### 6. Run the development server
-
-```bash
+### 6. Run the server
+```
 python manage.py runserver
 ```
 
-Visit `http://127.0.0.1:8000/` in your browser.
+Visit `http://127.0.0.1:8000/`
 
-## Usage
+## Pages
 
 | Page | URL |
 |---|---|
 | Home | `/` |
 | Login | `/accounts/login/` |
 | Register | `/accounts/register/` |
-| Profile | `/accounts/profile/` |
 | Add Song | `/add/` |
 | Search | `/search/` |
 | Dashboard | `/dashboard/` |
@@ -99,16 +99,6 @@ Visit `http://127.0.0.1:8000/` in your browser.
 | Insights | `/insights/` |
 | Export CSV | `/export/csv/` |
 | Export PDF | `/export/pdf/` |
-
-## Adding Data
-
-Use the Django admin panel to add Artists and Genres before adding songs, since songs reference them via dropdowns:
-
-```bash
-python manage.py createsuperuser
-```
-
-Then visit `/admin/` and add Artists and Genres first, followed by Songs.
 
 ## Team
 
@@ -120,5 +110,6 @@ Then visit `/admin/` and add Artists and Genres first, followed by Songs.
 
 ## Notes
 
-- Energy values are decimals between 0.0 and 1.0 (e.g. 0.8 for high energy).
-- The PDF report includes a summary, genre distribution table, top 10 songs, and auto-generated insights.
+- Energy values are decimals between 0.0 and 1.0
+- Genres balanced at ~50 songs each for fair chart visualization
+- Dataset imported via custom Django management command
